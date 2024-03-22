@@ -1,0 +1,8 @@
+.w-custom {
+  width: 100%;
+}
+@media screen and (min-width: 1300px) {
+  .w-custom {
+    width: 60%;
+  }
+}
