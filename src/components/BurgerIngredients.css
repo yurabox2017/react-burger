@@ -1,6 +1,17 @@
 .w-custom {
   width: 100%;
 }
+.w-65 {
+  width: 65% !important;
+}
+.col-7-5 {
+  width: 63% !important;
+}
+.scroll-bar {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100vh - 260px);
+}
 @media screen and (min-width: 1300px) {
   .w-custom {
     width: 60%;

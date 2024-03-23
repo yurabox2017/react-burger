@@ -1,14 +1,15 @@
 import PropTypes from 'prop-types';
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
+import IngredientPropTypes from './propTypes/ingredientTypes';
 
-function BurgerConstructor(props) {
+function BurgerConstructor({ data }) {
   return (
     <ul className="list-group ">
-      {props.data.map((x, i) => (
+      {data.map((x, i) => (
         <li key={x._id} className="list-group-item bg-black">
           <ConstructorElement
             type={
-              (i + 1 === props.data.length ? 'bottom' : null) ||
+              (i + 1 === data.length ? 'bottom' : null) ||
               (i === 0 ? 'top' : null)
             }
             isLocked={true}
@@ -21,13 +22,7 @@ function BurgerConstructor(props) {
     </ul>
   );
 }
-
-export default BurgerConstructor;
-
 BurgerConstructor.propTypes = {
-  data: {
-    _id: PropTypes.string,
-    name: PropTypes.string,
-    price: PropTypes.number,
-  },
+  data: PropTypes.arrayOf(PropTypes.shape(IngredientPropTypes())),
 };
+export default BurgerConstructor;

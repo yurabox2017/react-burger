@@ -1,15 +1,49 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AppHeader from './components/headers/AppHeader';
 import BurgerIngredients from './components/BurgerIngredients';
 import BurgerConstructor from './components/BurgerConstructor';
-import { data } from './utils/data';
 import './App.css';
 import {
   Button,
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import Modal from './components/Modal';
+import useOutsideClick from './customHooks/useOutsideClick';
+import OrderDetails from './components/modals/OrderDetails';
+import { array } from 'prop-types';
 
 function App() {
+  const [isOpen, setOpen] = useState(false);
+  const [data, getData] = useState([]);
+  const url = 'https://norma.nomoreparties.space/api/ingredients';
+  // const ref = useOutsideClick(setOpen);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(url);
+        const json = await res.json();
+        getData(json.data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchData();
+
+    function handleKeyUp(e: any) {
+      if (e.key === 'Escape') setOpen(false);
+    }
+    document.addEventListener('keyup', handleKeyUp);
+
+    return () => document.removeEventListener('keyup', handleKeyUp);
+  }, []);
+
+  const modal = (
+    <Modal setOpen={setOpen}>
+      <OrderDetails />
+    </Modal>
+  );
+
   return (
     <>
       <header className="bg-dark">
@@ -24,13 +58,7 @@ function App() {
             <BurgerIngredients data={data} />
           </div>
           <div className="col">
-            <div
-              style={{
-                overflowY: 'auto',
-                overflowX: 'hidden',
-                height: 'calc(100vh - 200px)',
-              }}
-            >
+            <div className="scroll-bar">
               <div className="row pt-25">
                 <div className="col-12 text-center">
                   <BurgerConstructor data={data} />
@@ -44,7 +72,12 @@ function App() {
                 </p>
               </div>
               <div className="col">
-                <Button htmlType="button" type="primary" size="large">
+                <Button
+                  htmlType="button"
+                  type="primary"
+                  size="large"
+                  onClick={() => setOpen(true)}
+                >
                   Оформить заказ
                 </Button>
               </div>
@@ -52,6 +85,7 @@ function App() {
           </div>
         </div>
       </main>
+      {isOpen && modal}
     </>
   );
 }
