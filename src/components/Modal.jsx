@@ -24,6 +24,7 @@ function Modal({ children, setOpen, header = '' }) {
         style={{
           display: 'block',
           width: '39%',
+          height: '88%',
           left: '30%',
           overflow: 'hidden',
         }}
