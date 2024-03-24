@@ -7,15 +7,7 @@ import Modal from './Modal';
 import IngredientDetails from './modals/IngredientDetails';
 import IngredientPropTypes from './propTypes/ingredientTypes';
 
-function BurgerIngredients({ data }) {
-  useEffect(() => {
-    document.addEventListener('keyup', handleKeyUp);
-    return () => document.removeEventListener('keyup', handleKeyUp);
-  }, []);
-
-  function handleKeyUp(e) {
-    if (e.key === 'Escape') setOpen(false);
-  }
+function BurgerIngredients({ ingredients }) {
   const [current, setCurrent] = useState('one');
   const [isOpen, setOpen] = useState(false);
   const [selectedItem, selectedIngredient] = useState(null);
@@ -32,10 +24,10 @@ function BurgerIngredients({ data }) {
   };
   return (
     <>
-      <div className="row">
-        <div className="col-6 offset-4">
+      <div className="row ms-auto " style={{ width: '625px' }}>
+        <div className="col mx-0  text-start">
           <p
-            className="text-white text text_type_main-large mt-10 mr-8"
+            className="text-white text text_type_main-large mt-10"
             style={{ marginBottom: '20px' }}
           >
             Соберите бургер
@@ -53,28 +45,31 @@ function BurgerIngredients({ data }) {
           Начинки
         </Tab>
       </div>
-      <div className="scroll-bar">
-        <div className="row  justify-content-end">
-          <div className="col-7-5 ">
-            <div className="row row-cols-2">
-              {data.map((x) => (
-                <div className="col ">
-                  <Card
-                    key={x._id}
-                    item={x}
-                    handleSelectedClick={handleSelectedClick}
-                  />
-                </div>
-              ))}
-            </div>
+
+      <div
+        className="row mx-0 ms-auto  justify-content-end"
+        style={{ width: '625px' }}
+      >
+        <div className="col scroll-bar">
+          <div className="row row-cols-2">
+            {ingredients.map((x) => (
+              <div className="col ">
+                <Card
+                  key={x._id}
+                  item={x}
+                  handleSelectedClick={handleSelectedClick}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </div>
+
       {isOpen && modal}
     </>
   );
 }
 BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape(IngredientPropTypes())),
+  ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientPropTypes())),
 };
 export default BurgerIngredients;

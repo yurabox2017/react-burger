@@ -12,6 +12,9 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+header.bg-grey {
+  background-color: #2f2f37;
+}
 
 .App-header {
   background-color: #282c34;
@@ -23,10 +26,8 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
-.scroll-bar {
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: calc(100vh - 200px);
+.main {
+  background-color: #2f2f37;
 }
 
 .App-link {

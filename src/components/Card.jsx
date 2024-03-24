@@ -2,9 +2,6 @@ import {
   Counter,
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState } from 'react';
-import IngredientDetails from './modals/IngredientDetails';
-import Modal from './Modal';
 
 function Card({ item, handleSelectedClick }) {
   return (

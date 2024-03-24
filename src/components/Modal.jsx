@@ -1,22 +1,32 @@
 import './Modal.css';
-import React, { Component, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import useOutsideClick from '../customHooks/useOutsideClick';
+import ModalOverlay from './modals/ModalOverlay';
+
 const modalRoot = document.getElementById('modals');
 
 function Modal({ children, setOpen, header = '' }) {
-  // Возвращаем ReactDOM.createPortal,
-  // который поместит дочерние элементы в modalRoot
-  useEffect(() => {}, []);
+  useEffect(() => {
+    document.addEventListener('keyup', handleKeyUp);
+    return () => document.removeEventListener('keyup', handleKeyUp);
+  }, []);
 
-  // const ref = useOutsideClick(setOpen(false));
+  function handleKeyUp(e) {
+    if (e.key === 'Escape') setOpen(false);
+  }
+
   return ReactDOM.createPortal(
     <>
       <div
         className="modal fade show "
         tabIndex="-1"
         role="dialog"
-        style={{ display: 'block' }}
+        style={{
+          display: 'block',
+          width: '39%',
+          left: '30%',
+          overflow: 'hidden',
+        }}
       >
         <div className="modal-dialog modal-lg" role="document">
           <div className="modal-content">
@@ -36,11 +46,7 @@ function Modal({ children, setOpen, header = '' }) {
           </div>
         </div>
       </div>
-      <div
-        className="modal-backdrop fade show"
-        onClick={() => console.log('click')}
-        style={{ display: 'block' }}
-      ></div>
+      <ModalOverlay setOpen={setOpen} />
     </>,
     modalRoot
   );

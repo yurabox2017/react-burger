@@ -15,21 +15,21 @@ function IngredientDetails({ item }) {
           </p>
         </div>
       </div>
-      <div className="row row-cols-4 pb-15 text-white justify-content-center ">
-        <div className="col-2 text-center ">
-          <label>Калории, ккал</label>
+      <div className="row row-cols-4 pb-15  justify-content-center ">
+        <div className="col-3 text-center ">
+          <p className="text text_type_main-small">Калории, ккал</p>
           <p className="text  text_type_digits-small">{item.calories}</p>
         </div>
-        <div className="col-2 text-center ">
-          <label>Белки, г</label>
+        <div className="col-3 text-center ">
+          <p className="text text_type_main-small">Белки, г</p>
           <p className="text text_type_digits-small">{item.proteins}</p>
         </div>
-        <div className="col-2 text-center ">
-          <label>Жиры, г</label>
+        <div className="col-3 text-center ">
+          <p className="text text_type_main-small">Жиры, г</p>
           <p className="text  text_type_digits-small">{item.fat}</p>
         </div>
-        <div className="col-2 text-center ">
-          <label>Углеводы, г</label>
+        <div className="col-3 text-center ">
+          <p className="text text_type_main-small">Углеводы, г</p>
           <p className="text text_type_digits-small">{item.carbohydrates}</p>
         </div>
       </div>

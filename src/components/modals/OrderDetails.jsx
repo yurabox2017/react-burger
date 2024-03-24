@@ -4,13 +4,13 @@ function OrderDetails() {
     <>
       <div className="row pb-8">
         <div className="col-12 text-center ">
-          <p className="text text-white text_type_digits-large">034536</p>
+          <p className="text text_type_digits-large">034536</p>
         </div>
       </div>
       <div className="row pb-8">
         <div className="col-12 text-center">
-          <p className="text text-white text_type_main-medium">
-            Идентификатор заказа
+          <p className="text text_type_main-medium text_color_inactive">
+            идентификатор заказа
           </p>
         </div>
       </div>
@@ -21,14 +21,14 @@ function OrderDetails() {
       </div>
       <div className="row">
         <div className="col-12 text-center">
-          <p className="text text-white text_type_main-default">
+          <p className="text text_type_main-default">
             Ваш заказ начали готовить
           </p>
         </div>
       </div>
       <div className="row pt-2 pb-30">
         <div className="col-12 text-center">
-          <p className="text-white text text_type_main-default text_color_inactive text-muted">
+          <p className=" text text_type_main-default text_color_inactive ">
             Дождитесь готовности на орбитальной станции
           </p>
         </div>
