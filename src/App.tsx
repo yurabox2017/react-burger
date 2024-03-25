@@ -1,57 +1,54 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AppHeader from './components/headers/AppHeader';
 import BurgerIngredients from './components/BurgerIngredients';
 import BurgerConstructor from './components/BurgerConstructor';
-import { data } from './utils/data';
 import './App.css';
-import {
-  Button,
-  CurrencyIcon,
-} from '@ya.praktikum/react-developer-burger-ui-components';
+import Modal from './components/Modal';
+import OrderDetails from './components/modals/OrderDetails';
 
 function App() {
+  const [isOpen, setOpen] = useState(false);
+  const [ingredients, setData] = useState([]);
+  const url = 'https://norma.nomoreparties.space/api/ingredients';
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(response.status + ' ' + response.statusText);
+        }
+        const json = await response.json();
+        setData(json.data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const modal = (
+    <Modal setOpen={setOpen}>
+      <OrderDetails />
+    </Modal>
+  );
+
   return (
     <>
-      <header className="bg-dark">
+      <header className="bg-grey">
         <AppHeader />
       </header>
-      <main
-        className="bg-black"
-        style={{ height: 'calc(100vh - 82px)', overflow: 'hidden' }}
-      >
-        <div className="row">
+      <main className="bg-black main-scroll-bar">
+        <div className="row mx-0">
           <div className="col text-center">
-            <BurgerIngredients data={data} />
+            <BurgerIngredients ingredients={ingredients} />
           </div>
           <div className="col">
-            <div
-              style={{
-                overflowY: 'auto',
-                overflowX: 'hidden',
-                height: 'calc(100vh - 200px)',
-              }}
-            >
-              <div className="row pt-25">
-                <div className="col-12 text-center">
-                  <BurgerConstructor data={data} />
-                </div>
-              </div>
-            </div>
-            <div className="row pt-10">
-              <div className="col offset-1 align-self-center text-end">
-                <p className="text text_type_digits-medium text-white align-self-center">
-                  610 <CurrencyIcon type="primary" />
-                </p>
-              </div>
-              <div className="col">
-                <Button htmlType="button" type="primary" size="large">
-                  Оформить заказ
-                </Button>
-              </div>
-            </div>
+            <BurgerConstructor ingredients={ingredients} setOpen={setOpen} />
           </div>
         </div>
       </main>
+      {isOpen && modal}
     </>
   );
 }

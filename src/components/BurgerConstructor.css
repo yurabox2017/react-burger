@@ -1,0 +1,5 @@
+.burger-constructor-scroll-bar {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100vh - 337px);
+}
