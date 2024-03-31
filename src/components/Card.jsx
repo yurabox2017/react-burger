@@ -6,7 +6,7 @@ import {
 function Card({ item, handleSelectedClick }) {
   return (
     <div
-      // key={item._id}
+      key={item._id}
       className="card bg-black text-white"
       onClick={() => handleSelectedClick(item)}
       style={{ width: '18rem', cursor: 'pointer' }}

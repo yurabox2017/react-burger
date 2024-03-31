@@ -1,35 +1,76 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import AppHeader from './components/headers/AppHeader';
 import BurgerIngredients from './components/BurgerIngredients';
 import BurgerConstructor from './components/BurgerConstructor';
 import './App.css';
 import Modal from './components/Modal';
 import OrderDetails from './components/modals/OrderDetails';
+import { IngredientsContext } from './services/IngredientsContext';
 
 function App() {
+  const initOrder = {
+    name: '',
+    order: {
+      number: '',
+    },
+    success: false,
+  };
   const [isOpen, setOpen] = useState(false);
   const [ingredients, setData] = useState([]);
-  const url = 'https://norma.nomoreparties.space/api/ingredients';
+  const [constructorItems, setItem] = useState([]);
+  const [order, setOrder] = useState(initOrder);
+  const ingredientsUrl = 'https://norma.nomoreparties.space/api/ingredients';
+  const ordersUrl = 'https://norma.nomoreparties.space/api/orders';
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(url);
+  const fetchData = async (url: any, requestInit: any, func: any) => {
+    try {
+      const response = await fetch(url, requestInit);
+      if (!response.ok) {
+        throw new Error(response.status + ' ' + response.statusText);
+      }
+      const json = await response.json();
+      setData(json.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const postData = (url: any, requestInit: any) => {
+    fetch(url, requestInit)
+      .then((response) => {
         if (!response.ok) {
           throw new Error(response.status + ' ' + response.statusText);
         }
-        const json = await response.json();
-        setData(json.data);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    fetchData();
+        return response.json();
+      })
+      .then((data) => setOrder(data))
+      .catch((e) => console.log(e));
+  };
+
+  useEffect(() => {
+    const req = { method: 'get' };
+    fetchData(ingredientsUrl, req, setData);
   }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      console.log(constructorItems);
+      const req = {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+        },
+        body: JSON.stringify({
+          ingredients: constructorItems,
+        }),
+      };
+      postData(ordersUrl, req);
+    }
+  }, [isOpen]);
 
   const modal = (
     <Modal setOpen={setOpen}>
-      <OrderDetails />
+      <OrderDetails {...order} />
     </Modal>
   );
 
@@ -44,7 +85,13 @@ function App() {
             <BurgerIngredients ingredients={ingredients} />
           </div>
           <div className="col">
-            <BurgerConstructor ingredients={ingredients} setOpen={setOpen} />
+            <IngredientsContext.Provider value={ingredients}>
+              <BurgerConstructor
+                setOpen={setOpen}
+                constructorItems={constructorItems}
+                setItem={setItem}
+              />
+            </IngredientsContext.Provider>
           </div>
         </div>
       </main>

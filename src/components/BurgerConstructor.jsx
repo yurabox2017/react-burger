@@ -1,3 +1,4 @@
+import { useContext, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
@@ -6,22 +7,73 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientPropTypes from './propTypes/ingredientTypes';
 import './BurgerConstructor.css';
+import { IngredientsContext } from '../services/IngredientsContext';
 
-function BurgerConstructor({ ingredients, setOpen }) {
+function filterIngredients(item, type) {
+  switch (type) {
+    case 'bun':
+      return item.type === type && item._id === '643d69a5c3f7b9001cfa093c';
+    case 'sauce':
+      return item.type === type;
+    default:
+      throw new Error(`Wrong type of action: ${type}`);
+  }
+}
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'totalPrice':
+      return action.payload;
+    default:
+      throw new Error(`Wrong type of action: ${action.type}`);
+  }
+}
+
+function BurgerConstructor({ setOpen, constructorItems, setItem }) {
+  const ingredients = useContext(IngredientsContext);
+  const [totalPrice, dispatch] = useReducer(reducer, []);
+
+  const typeValue = (i) => {
+    return (
+      (i === 0 ? 'top' : null) ||
+      (i + 1 === constructorItems.length ? 'bottom' : null)
+    );
+  };
+
+  const setConstructorItem = () => {
+    const item = ingredients.filter((x) => filterIngredients({ ...x }, 'bun'));
+    const sauce = ingredients.filter((x) =>
+      filterIngredients({ ...x }, 'sauce')
+    );
+
+    setItem(item);
+    setItem((prevItem) => [...prevItem, ...sauce]);
+    setItem((prevItem) => [...prevItem, ...item]);
+  };
+
+  useEffect(() => {
+    setConstructorItem();
+  }, [ingredients]);
+
+  useEffect(() => {
+    let total = 0;
+    constructorItems.map((item) => (total += item.price));
+    dispatch({ type: 'totalPrice', payload: total });
+  }, [constructorItems, dispatch]);
+
   return (
     <>
       <div className="row pt-25">
         <div className="col-12 text-center ">
           <ul className="list-group burger-constructor-scroll-bar">
-            {ingredients.map((x, i) => (
-              <li key={x._id} className="list-group-item bg-black">
+            {constructorItems?.map((x, i) => (
+              <li key={i} className="list-group-item bg-black">
                 <ConstructorElement
-                  type={
-                    (i + 1 === ingredients.length ? 'bottom' : null) ||
-                    (i === 0 ? 'top' : null)
-                  }
+                  type={typeValue(i)}
                   isLocked={true}
-                  text={x.name}
+                  text={`${x.name} ${
+                    typeValue(i) === 'top' ? '(верх)' : '(низ)'
+                  }`}
                   price={x.price}
                   thumbnail={x.image}
                 />
@@ -33,7 +85,7 @@ function BurgerConstructor({ ingredients, setOpen }) {
       <div className="row pt-10">
         <div className="col offset-1 align-self-center text-end">
           <p className="text text_type_digits-medium text-white align-self-center">
-            610 <CurrencyIcon type="primary" />
+            {totalPrice} <CurrencyIcon type="primary" />
           </p>
         </div>
         <div className="col">

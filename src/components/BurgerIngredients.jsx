@@ -52,13 +52,9 @@ function BurgerIngredients({ ingredients }) {
       >
         <div className="col scroll-bar">
           <div className="row row-cols-2">
-            {ingredients.map((x) => (
-              <div className="col ">
-                <Card
-                  key={x._id}
-                  item={x}
-                  handleSelectedClick={handleSelectedClick}
-                />
+            {ingredients.map((x, i) => (
+              <div key={i} className="col ">
+                <Card item={x} handleSelectedClick={handleSelectedClick} />
               </div>
             ))}
           </div>

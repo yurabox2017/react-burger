@@ -1,10 +1,10 @@
 import { Typography } from '@ya.praktikum/react-developer-burger-ui-components';
-function OrderDetails() {
+function OrderDetails(props) {
   return (
     <>
       <div className="row pb-8">
         <div className="col-12 text-center ">
-          <p className="text text_type_digits-large">034536</p>
+          <p className="text text_type_digits-large">{props.order.number}</p>
         </div>
       </div>
       <div className="row pb-8">
