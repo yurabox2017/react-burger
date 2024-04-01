@@ -29,7 +29,7 @@ function reducer(state, action) {
   }
 }
 
-function BurgerConstructor({ setOpen, constructorItems, setItem }) {
+function BurgerConstructor({ showModalClick, constructorItems, setItem }) {
   const ingredients = useContext(IngredientsContext);
   const [totalPrice, dispatch] = useReducer(reducer, []);
 
@@ -93,7 +93,7 @@ function BurgerConstructor({ setOpen, constructorItems, setItem }) {
             htmlType="button"
             type="primary"
             size="large"
-            onClick={() => setOpen(true)}
+            onClick={showModalClick}
           >
             Оформить заказ
           </Button>

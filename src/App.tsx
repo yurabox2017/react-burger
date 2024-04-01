@@ -19,43 +19,29 @@ function App() {
   const [ingredients, setData] = useState([]);
   const [constructorItems, setItem] = useState([]);
   const [order, setOrder] = useState(initOrder);
-  const ingredientsUrl = 'https://norma.nomoreparties.space/api/ingredients';
-  const ordersUrl = 'https://norma.nomoreparties.space/api/orders';
+  const BASE_URL = 'https://norma.nomoreparties.space/api';
 
-  const fetchData = async (url: any, requestInit: any, func: any) => {
+  const fetchData = async (endPoint: any, options: any) => {
     try {
-      const response = await fetch(url, requestInit);
+      const response = await fetch(`${BASE_URL}/${endPoint}`, options);
       if (!response.ok) {
         throw new Error(response.status + ' ' + response.statusText);
       }
-      const json = await response.json();
-      setData(json.data);
+      return response.json();
     } catch (e) {
       console.log(e);
     }
   };
 
-  const postData = (url: any, requestInit: any) => {
-    fetch(url, requestInit)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(response.status + ' ' + response.statusText);
-        }
-        return response.json();
-      })
-      .then((data) => setOrder(data))
-      .catch((e) => console.log(e));
-  };
-
   useEffect(() => {
-    const req = { method: 'get' };
-    fetchData(ingredientsUrl, req, setData);
+    const options = { method: 'get' };
+    fetchData('ingredients', options).then((data) => setData(data.data));
   }, []);
 
   useEffect(() => {
     if (isOpen) {
       console.log(constructorItems);
-      const req = {
+      const options = {
         method: 'post',
         headers: {
           'Content-Type': 'application/json;charset=utf-8',
@@ -64,9 +50,13 @@ function App() {
           ingredients: constructorItems,
         }),
       };
-      postData(ordersUrl, req);
+      fetchData('orders', options).then((data) => setOrder(data));
     }
   }, [isOpen]);
+
+  const showModalClick = () => {
+    setOpen(true);
+  };
 
   const modal = (
     <Modal setOpen={setOpen}>
@@ -82,12 +72,14 @@ function App() {
       <main className="bg-black main-scroll-bar">
         <div className="row mx-0">
           <div className="col text-center">
-            <BurgerIngredients ingredients={ingredients} />
+            <IngredientsContext.Provider value={ingredients}>
+              <BurgerIngredients ingredients={ingredients} />
+            </IngredientsContext.Provider>
           </div>
           <div className="col">
             <IngredientsContext.Provider value={ingredients}>
               <BurgerConstructor
-                setOpen={setOpen}
+                showModalClick={showModalClick}
                 constructorItems={constructorItems}
                 setItem={setItem}
               />
