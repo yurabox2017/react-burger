@@ -2,14 +2,14 @@ import {
   Counter,
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import './Card.module.css';
 
 function Card({ item, handleSelectedClick }) {
   return (
     <div
-      // key={item._id}
-      className="card bg-black text-white"
+      key={item._id}
+      className="card bg-black text-white custom-card"
       onClick={() => handleSelectedClick(item)}
-      style={{ width: '18rem', cursor: 'pointer' }}
     >
       <Counter count={1} size="small" />
       <img src={item.image} className="card-img-top" />
